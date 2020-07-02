@@ -1,0 +1,13 @@
+﻿@model ELibraryWebApp.Models.AdminBooksViewModel
+
+@Html.Partial("FilterPartial", Model.FilterModel, new ViewDataDictionary { { "genres", Model.Genres }, { "countries", Model.Countries } })
+
+<div id="books">
+    @Html.Partial("BooksPartial", Model.Books)
+</div>
+
+@Html.Partial("CreateBookPartial", Model.CreateBookModel, new ViewDataDictionary { { "genres", Model.Genres }, { "countries", Model.Countries } })
+
+@section scripts{
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
+}

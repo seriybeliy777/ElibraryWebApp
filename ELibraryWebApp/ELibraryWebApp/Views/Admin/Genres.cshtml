@@ -1,0 +1,17 @@
+﻿@model ELibraryWebApp.Models.AdminGenresViewModel
+
+<div id="genres">
+    @Html.Partial("GenresPartial", Model.Genres)
+</div>
+
+@Html.Partial("CreateGenrePartial", Model.CreateGenreModel)
+
+@section scripts{
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
+
+    <script>
+        function onSuccess() {
+            $("#create-modal").modal("hide");
+        }
+    </script>
+}

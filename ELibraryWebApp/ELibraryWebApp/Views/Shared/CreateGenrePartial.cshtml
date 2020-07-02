@@ -1,0 +1,28 @@
+﻿@model ELibraryWebApp.Database.Genre
+
+<div id="create-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Добавить жанр</h4>
+            </div>
+            @using (Ajax.BeginForm("CreateGenre", "Admin", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "genres", OnSuccess = "onSuccess" }))
+            {
+                <div class="modal-body">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Name, new { @class = "col-md-12 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Название" })
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger" style="margin: 15px 15px 0 0">Добавить</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

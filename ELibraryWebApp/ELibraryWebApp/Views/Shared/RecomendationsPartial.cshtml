@@ -1,0 +1,68 @@
+﻿@model List<ELibraryWebApp.Models.RecommendBook>
+
+<h3>Рекомендуем к прочтению</h3>
+<div class="row">
+    @if (Model.Count > 0)
+    {
+        if (Model.Count > 4)
+        {
+            <div class="col-md-12">
+                <div class="carousel slide multi-item-carousel" id="theCarousel">
+                    <div class="carousel-inner">
+                        @for (int i = 0; i < Model.Count; ++i)
+                        {
+                            if (i == 0)
+                            {
+                                <div class="item active">
+                                    <div class="col-xs-3">
+                                        <a href="#1"><img src="@Model[i].Book.ImageUrl" class="img-responsive recomend-img"></a>
+                                        <p style="margin-bottom:2px">@Model[i].Book.Name</p>
+                                        <div style="display:flex">
+                                            <span style="font-size:16px; color: rgb(239, 197, 41);">@Math.Round(Model[i].Rating, 1) </span><div class="rateit" data-bookid="@Model[i].Book.Id" data-rateit-mode="font" data-rateit-resetable="false" data-rateit-ispreset="true" data-rateit-min="0" data-rateit-step="0.1" data-rateit-max="1" data-rateit-value="1" data-rateit-readonly="true" style="font-size:19px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="item">
+                                    <div class="col-xs-3">
+                                        <a href="#1"><img src="@Model[i].Book.ImageUrl" class="img-responsive recomend-img"></a>
+                                        <p style="margin-bottom:2px">@Model[i].Book.Name</p>
+                                        <div style="display:flex">
+                                            <span style="font-size:16px; color: rgb(239, 197, 41);">@Math.Round(Model[i].Rating, 1) </span><div class="rateit" data-bookid="@Model[i].Book.Id" data-rateit-mode="font" data-rateit-resetable="false" data-rateit-ispreset="true" data-rateit-min="0" data-rateit-step="0.1" data-rateit-max="1" data-rateit-value="1" data-rateit-readonly="true" style="font-size:19px"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <a class="left carousel-control" href="#theCarousel" data-slide="prev"><i class="glyphicon glyphicon-chevron-left"></i></a>
+                    <a class="right carousel-control" href="#theCarousel" data-slide="next"><i class="glyphicon glyphicon-chevron-right"></i></a>
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="col-md-12" style="display: flex;justify-content: center;">
+                @for (int i = 0; i < Model.Count; ++i)
+                {
+                    <div class="col-xs-3" style="width:auto">
+                        <a href="#1"><img src="@Model[i].Book.ImageUrl" class="img-responsive recomend-img"></a>
+                        <p style="margin-bottom:2px; max-width: 180px;">@Model[i].Book.Name</p>
+                        <div style="display:flex">
+                            <span style="font-size:16px; color: rgb(239, 197, 41);">@Math.Round(Model[i].Rating, 1) </span><div class="rateit" data-bookid="@Model[i].Book.Id" data-rateit-mode="font" data-rateit-resetable="false" data-rateit-ispreset="true" data-rateit-min="0" data-rateit-step="0.1" data-rateit-max="1" data-rateit-value="1" data-rateit-readonly="true" style="font-size:19px"></div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <div class="not-recommendations">
+            Пока нет ни одной рекомендации
+        </div>
+    }
+</div>

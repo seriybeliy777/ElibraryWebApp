@@ -1,0 +1,118 @@
+﻿@using Microsoft.AspNet.Identity
+@using ELibraryWebApp.Database
+@model List<ELibraryWebApp.Database.Book>
+
+@foreach (var book in Model)
+{
+    <div class="book-wrapper">
+        <div class="book-wrapper__poster">
+            <img src="@book.ImageUrl" />
+            <br />
+        </div>
+        <div class="book-wrapper__content">
+            <h3>
+                @book.Name
+                <button class="btn btn-primary" onclick="window.open('@book.PurchaseUrl','_blank')">Скачать</button>
+                @if (User.IsInRole("admin"))
+                {
+                    @Ajax.ActionLink("Удалить", "RemoveBook", new { id = book.Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "books" }, new { @class = "btn btn-danger" })
+                }
+                else
+                {
+                    string userId = User.Identity.GetUserId();
+                    Rating rating = book.Ratings.FirstOrDefault(r => r.UserId == userId);
+                    if (rating != null)
+                    {
+                        @Ajax.ActionLink("Удалить оценку", "RemoveRating", new { id = rating.Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "books-rec", OnSuccess = "successRemovedRating" }, new { @class = "btn btn-danger" })
+                    }
+                }
+            </h3>
+            @if (User.IsInRole("admin"))
+            {
+                <p>Средний рейтинг</p>
+                <div style="display:flex">
+                    @if (book.Ratings.Count == 0)
+                    {
+                        <span style="font-size:30px">Нет оценки</span>
+                    }
+                    else
+                    {
+                        <span style="font-size:30px">@Math.Round(book.Ratings.Average(r => r.Value), 1) </span><div class="rateit" data-bookid="@book.Id" data-rateit-mode="font" data-rateit-resetable="false" data-rateit-ispreset="true" data-rateit-min="0" data-rateit-step="0.1" data-rateit-max="1" data-rateit-value="1" data-rateit-readonly="true" style="font-size:38px"></div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p>Средний рейтинг</p>
+                <div style="display:flex">
+                    @if (book.Ratings.Count == 0)
+                    {
+                        <span style="font-size:30px">Нет оценки</span>
+                    }
+                    else
+                    {
+                        <span style="font-size:30px">@Math.Round(book.Ratings.Average(r => r.Value), 1) </span><div class="rateit" data-bookid="@book.Id" data-rateit-mode="font" data-rateit-resetable="false" data-rateit-ispreset="true" data-rateit-min="0" data-rateit-step="0.1" data-rateit-max="1" data-rateit-value="1" data-rateit-readonly="true" style="font-size:38px"></div>
+                    }
+                </div>
+                <p>Ваша оценка</p>
+                <div style="display:flex">
+                    @{
+                        string userId = User.Identity.GetUserId();
+                        Rating rating = book.Ratings.FirstOrDefault(r => r.UserId == userId);
+                    }
+                    @if (rating != null)
+                    {
+                        <span style="font-size:30px">@rating.Value </span>
+                        <div class="rateit" data-userid="@userId" data-bookid="@book.Id" data-rateit-mode="font" data-rateit-resetable="false" data-rateit-ispreset="true" data-rateit-min="0" data-rateit-step="0.1" data-rateit-max="10" data-rateit-value="@rating.Value" style="font-size:38px"></div>
+                    }
+                    else
+                    {
+                        <span style="font-size:30px">Нет оценки </span>
+                        <div class="rateit" data-userid="@userId" data-bookid="@book.Id" data-rateit-mode="font" data-rateit-resetable="false" data-rateit-ispreset="true" data-rateit-min="0" data-rateit-step="0.1" data-rateit-max="10" style="font-size:38px"></div>
+                    }
+
+                </div>
+            }
+            <div class="book-wrapper__content__wrapper">
+                <div class="book-wrapper__content__left">
+                    <p>
+                        <span class="book-wrapper__content__name">Рейтинг</span>
+                        @if (book.Ratings.Count > 0)
+                        {
+                            <span class="book-wrapper__content__descr">@book.Ratings.Sum(r => r.Value)</span>
+                        }
+                        else
+                        {
+                            <span class="book-wrapper__content__descr">Нет рейтинга</span>
+                        }
+                    </p>
+                    <p>
+                        <span class="book-wrapper__content__name">Автор</span>
+                        <span class="book-wrapper__content__descr">@book.Author</span>
+                    </p>
+                    <p>
+                        <span class="book-wrapper__content__name">Год издания</span>
+                        <span class="book-wrapper__content__descr">@book.Year</span>
+                    </p>
+                </div>
+                <div class="book-wrapper__content__right">
+                    <p>
+                        <span class="book-wrapper__content__name">Жанры</span>
+                        <span class="book-wrapper__content__descr">@String.Join(", ", book.Genres.Select(g => g.Name))</span>
+                    </p>
+                    <p>
+                        <span class="book-wrapper__content__name">Страна</span>
+                        <span class="book-wrapper__content__descr">@book.Country.Name</span>
+                    </p>
+                    <p>
+                        <span class="book-wrapper__content__name">Содержание</span>
+                        <span class="book-wrapper__content__descr">@book.PageCount страниц</span>
+                    </p>
+                </div>
+            </div>
+            <div class="book-wrapper__content__main">
+                @book.Description
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title – приложение ASP.NET</title>
+    @Styles.Render("~/Content/css")
+    @if (Session["isDark"] == null || (bool)Session["isDark"])
+    {
+        @Styles.Render("~/Content/DarkTheme.css")
+    }
+    else
+    {
+        @Styles.Render("~/Content/LightTheme.css")
+    }
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("header", required: false)
+</head>
+<body>
+    @if (User.Identity.IsAuthenticated)
+    {
+        if (User.IsInRole("admin"))
+        {
+            <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li><img src="../Content/logo.png" height="32" style="margin-top: 8px" /></li>
+                            <li>@Html.ActionLink("Книги", "Books", "Admin")</li>
+                            <li>@Html.ActionLink("Жанры", "Genres", "Admin")</li>
+                            <li>@Html.ActionLink("Страны", "Countries", "Admin")</li>
+                            <li><button class="btn btn-danger" style="margin-top: 8px" onclick="$('#create-modal').modal()">Добавить</button></li>
+                        </ul>
+
+                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a href="#" onclick="window.location.href='../Admin/ToggleTheme?url='+window.location.pathname">Переключить тему</a></li>
+                                <li><a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a></li>
+                            </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li><img src="../Content/logo.png" height="32" style="margin-top: 8px" /></li>
+                        </ul>
+                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="#" onclick="window.location.href='../Admin/ToggleTheme?url='+window.location.pathname">Переключить тему</a></li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a></li>
+                        </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="footer">
+            <p>«Умная Библиотека» ©. 2019г.</p>
+        </div>
+    }
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/Scripts/jquery.rateit.min.js")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

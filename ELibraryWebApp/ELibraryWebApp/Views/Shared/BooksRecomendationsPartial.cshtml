@@ -1,0 +1,9 @@
+﻿@model ELibraryWebApp.Models.HomeIndexViewModel
+
+<div id="books">
+    @Html.Partial("BooksPartial", Model.Books)
+</div>
+
+<div class="recommendations">
+    @Html.Partial("RecomendationsPartial", Model.Recommendations)
+</div>

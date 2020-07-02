@@ -1,0 +1,17 @@
+﻿@model ELibraryWebApp.Models.AdminCountriesViewModel
+
+<div id="countries">
+    @Html.Partial("CountriesPartial", Model.Countries)
+</div>
+
+@Html.Partial("CreateCountryPartial", Model.CreateCountryModel)
+
+@section scripts{
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
+
+    <script>
+        function onSuccess() {
+            $("#create-modal").modal("hide");
+        }
+    </script>
+}

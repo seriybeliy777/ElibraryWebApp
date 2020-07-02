@@ -1,0 +1,83 @@
+﻿@using ELibraryWebApp.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Выполнить вход";
+}
+
+
+@section header{
+    @if (Session["isDark"] == null || (bool)Session["isDark"])
+    {
+        <style>
+            body {
+                background:
+                /* top, transparent black, faked with gradient */
+                linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ),
+                /* bottom, image */
+                url(../Content/back.png);
+            }
+        </style>
+    }
+    else
+    {
+        <style>
+            body {
+                background:
+                /* top, transparent black, faked with gradient */
+                linear-gradient( rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7) ),
+                /* bottom, image */
+                url(../Content/back.png);
+            }
+        </style>
+    }
+}
+
+<div class="modal" tabindex="-1" role="dialog" style="display:block">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">
+                    Вход
+                    <a style="float:right; font-size:14px" href="#" onclick="window.location.href='../Admin/ToggleTheme?url='+window.location.pathname">Переключить тему</a>
+                </h4>
+            </div>
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                <div class="modal-body">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Email, new { @class = "col-md-12 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Password, new { @class = "col-md-12 control-label" })
+                        <div class="col-md-12">
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Пароль" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="checkbox">
+                                @Html.CheckBoxFor(m => m.RememberMe, new { style = "width: 300px; max-width: 300px" })
+                                @Html.LabelFor(m => m.RememberMe, new { style = "padding-left: 0" })
+                            </div>
+                        </div>
+                    </div>
+                    <p style="float: left">
+                        @Html.ActionLink("Регистрация нового пользователя", "Register")
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger" style="width:120px">Вход</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

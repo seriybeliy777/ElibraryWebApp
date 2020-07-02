@@ -1,0 +1,58 @@
+﻿@model ELibraryWebApp.Models.HomeIndexViewModel
+
+@Html.Partial("FilterPartial", Model.FilterModel, new ViewDataDictionary { { "genres", Model.Genres }, { "countries", Model.Countries } })
+
+<div id="books-rec">
+    @Html.Partial("BooksRecomendationsPartial", Model)
+</div>
+
+@section scripts{
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
+
+    <script>
+        function successRemovedRating() {
+            $('.rateit').rateit();
+        }
+
+        $(document).on("rated reset", ".rateit", function (e) {
+            var ri = $(this);
+
+            var value = ri.rateit('value');
+            var bookId = ri.data('bookid');
+            var userId = ri.data('userid');
+
+            $.ajax({
+                type: "POST",
+                url: "/Home/SetRating",
+                data: JSON.stringify({ rating: { id: 0, userId: userId, bookId: bookId, value: value } }),
+                contentType: 'application/json',
+                success: function (res) {
+                    $("#books-rec").html(res);
+                    $('.rateit').rateit();
+                }
+            });
+        });
+
+
+        $('.multi-item-carousel').carousel({
+            interval: false
+        });
+
+        $('.multi-item-carousel .item').each(function () {
+            var next = $(this).next();
+            if (!next.length) {
+                next = $(this).siblings(':first');
+            }
+            next.children(':first-child').clone().appendTo($(this));
+
+            for (var i = 0; i < 2; i++) {
+                next = next.next();
+                if (!next.length) {
+                    next = $(this).siblings(':first');
+                }
+
+                next.children(':first-child').clone().appendTo($(this));
+            }
+        });
+    </script>
+}

@@ -1,0 +1,48 @@
+﻿@using ELibraryWebApp.Database
+@model ELibraryWebApp.Models.FilterModel
+
+<div class="row filter">
+    @using (Ajax.BeginForm("Filter", "Admin", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "books" }))
+    {
+        <h3>Параметры фильтрации</h3>
+
+        <div class="col-lg-2">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Search, new { })
+                @Html.TextBoxFor(m => m.Search, new { @class = "form-control", placeholder = "Поиск", type = "text" })
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="form-group">
+                @Html.LabelFor(m => m.GenreId, new { })
+                @{
+                    var genres = new List<Genre> { new Genre { Id = -1, Name = "Любой" } };
+                    genres.AddRange(ViewData["genres"] as List<Genre>);
+                }
+                @Html.DropDownListFor(m => m.GenreId, genres.Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList(), new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                @Html.LabelFor(m => m.CountryId, new { })
+                @{
+                    var countries = new List<Country> { new Country { Id = -1, Name = "Любая" } };
+                    countries.AddRange(ViewData["countries"] as List<Country>);
+                }
+                @Html.DropDownListFor(m => m.CountryId, countries.Select(x => new SelectListItem() { Value = x.Id.ToString(), Text = x.Name }).ToList(), new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Rating, new { })
+                @Html.TextBoxFor(m => m.Rating, new { @class = "form-control", min = 0, step = 0.1, type = "number" })
+            </div>
+        </div>
+
+        <div class="col-lg-2">
+            <div class="form-group">
+                <button type="submit" class="btn btn-danger" style="margin-top: 25px;">Применить</button>
+            </div>
+        </div>
+    }
+</div>

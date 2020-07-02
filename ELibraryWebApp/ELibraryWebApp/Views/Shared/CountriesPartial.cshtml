@@ -1,0 +1,23 @@
+﻿@model List<ELibraryWebApp.Database.Country>
+
+<table class="table table-bordered table-striped table-dark">
+    <thead>
+        <tr>
+            <th>Идентификатор</th>
+            <th>Название</th>
+            <th>Связанные книги</th>
+            <th>Удалить</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var genre in Model)
+        {
+        <tr>
+            <td>@genre.Id</td>
+            <td>@genre.Name</td>
+            <td>@String.Join(", ", genre.Books.Select(b => b.Name))</td>
+            <td>@Ajax.ActionLink("Удалить", "RemoveCountry", new { id = genre.Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "countries" })</td>
+        </tr>
+        }
+    </tbody>
+</table>

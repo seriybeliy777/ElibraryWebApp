@@ -1,0 +1,86 @@
+﻿@using ELibraryWebApp.Database
+@model ELibraryWebApp.Models.CreateBookModel
+
+<div id="create-modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Добавить книгу</h4>
+            </div>
+            @using (Html.BeginForm("CreateBook", "Admin", FormMethod.Post, new { encType = "multipart/form-data" }))
+            {
+                <div class="modal-body">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Name, new { @class = "col-md-12 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Название" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Year, new { @class = "col-md-12 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.Year, new { @class = "form-control", type = "number", min = 1500, max = 2019 })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.PageCount, new { @class = "col-md-12 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.PageCount, new { @class = "form-control", type = "number", min = 1 })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Author, new { @class = "col-md-12 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.Author, new { @class = "form-control", placeholder = "Автор" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Description, new { @class = "col-md-12 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", placeholder = "Описание" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.PurchaseUrl, new { @class = "col-md-12 control-label" })
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(m => m.PurchaseUrl, new { @class = "form-control", placeholder = "Ссылка на скачивание" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.CountryId, new { @class = "col-md-12 control-label" })
+                        <div class="col-md-12">
+                            @Html.DropDownListFor(m => m.CountryId, (ViewData["countries"] as List<Country>).Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name }), new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.File, new { @class = "col-md-12 control-label" })
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-danger" onclick="$('#File').click()">Выберите постер</button>
+                            @Html.TextBoxFor(m => m.File, new { type = "file", style = "display: none" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.CheckedGenreObjects, new { @class = "col-md-12 control-label" })
+
+                        <div style="margin-left:20px">
+                            @for (int i = 0; i < Model.CheckedGenreObjects.Count; ++i)
+                            {
+                            <label class="checkbox-label" name="CheckedCollectionObjects" style="width:150px; display:inline-block">@((ViewData["genres"] as List<Genre>)[i].Name)</label>
+                                @Html.CheckBoxFor(m => Model.CheckedGenreObjects[i].Checked, new { style = "width: 20px; max-width: 20px" })
+                                @Html.HiddenFor(m => Model.CheckedGenreObjects[i].Id)
+                                <br>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Добавить</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
